@@ -22,9 +22,20 @@ const io = new Server(server, {
 });
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+  })
   .then(() => console.log("MongoDB connected successfully."))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    console.error(
+      "Connection string:",
+      process.env.MONGO_URI ? "Present" : "Missing"
+    );
+  });
 
 app.use(cors());
 app.use(express.json({ limit: "100mb" }));
