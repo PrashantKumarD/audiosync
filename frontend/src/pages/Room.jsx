@@ -247,11 +247,10 @@ const Room = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen bg-purple-200 text-white">
-      
-      <aside className="flex w-84 flex-col justify-between bg-white/30 backdrop-blur-md p-4">
+    <div className="flex flex-col md:flex-row h-screen w-screen bg-purple-200 text-white">
+      <aside className="flex w-full md:w-84 flex-col justify-between bg-white/30 backdrop-blur-md p-4">
         <div>
-          <h2 className="mb-4 text-xl text-center text-purple-500 font-bold">
+          <h2 className="mb-4 text-lg md:text-xl text-center text-purple-500 font-bold">
             Room Code
           </h2>
           <input
@@ -265,11 +264,11 @@ const Room = () => {
               toast.success("Room code copied!");
             }}
           />
-          <h2 className="mb-4 text-xl text-cyan-500 font-bold">
+          <h2 className="mb-4 text-lg md:text-xl text-cyan-500 font-bold">
             Participants ({participants.length})
           </h2>
           <div className="border border-gray-300 mb-5"></div>
-          <ul className="space-y-2">
+          <ul className="space-y-2 max-h-32 md:max-h-none">
             {participants.map((p) => (
               <li key={p.socketId} className="flex items-center gap-2">
                 <span className="ml-2">👤</span>
@@ -288,8 +287,7 @@ const Room = () => {
         </button>
       </aside>
 
-      
-      <main className="flex h-full flex-1 flex-col items-center justify-center p-6">
+      <main className="flex h-auto md:h-full flex-1 flex-col items-center justify-center p-6">
         <header className="text-3xl font-bold text-pink-400 bg-white/10 backdrop-blur-md p-4 rounded-lg transition-transform duration-200 cursor-pointer hover:scale-105 hover:bg-gray-100">
           🎶RhythmSync
         </header>
@@ -354,10 +352,9 @@ const Room = () => {
         </label>
       </main>
 
-      
-      <aside className="flex w-102 flex-col bg-white/30 backdrop-blur-md p-4">
+      <aside className="flex w-full md:w-102 flex-col bg-white/30 backdrop-blur-md p-4 h-64 md:h-full">
         <div className="flex-grow flex flex-col min-h-0 ">
-          <h2 className="mb-2 text-center px-10 text-xl text-purple-500 font-bold">
+          <h2 className="mb-2 text-center px-4 md:px-10 text-xl text-purple-500 font-bold">
             Chat Window
           </h2>
           <div
@@ -369,7 +366,9 @@ const Room = () => {
                 <span className="font-bold text-cyan-300">
                   {msg.username}:{" "}
                 </span>
-                <span>{msg.text}</span>
+                <span className="font-semibold text-purple-500">
+                  {msg.text}
+                </span>
               </div>
             ))}
           </div>
