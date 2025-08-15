@@ -23,10 +23,8 @@ const io = new Server(server, {
 
 mongoose
   .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-    socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+    socketTimeoutMS: 450000, // Close sockets after 45s of inactivity
   })
   .then(() => console.log("MongoDB connected successfully."))
   .catch((err) => {
@@ -46,6 +44,11 @@ cloudinary.config({
   cloud_name: CLOUD_NAME,
   api_key: API_KEY,
   api_secret: API_SECRET,
+});
+
+// Root route to show server status
+app.get("/", (req, res) => {
+  res.send('backend is running');
 });
 
 app.get("/signature", (req, res) => {
