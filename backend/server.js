@@ -14,7 +14,9 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173",
-      "https://your-frontend-domain.vercel.app",
+      "https://audiosync-frontend.vercel.app",
+      "https://audiosync-frontend-prashant-kumar-dwebedis-projects.vercel.app",
+      "https://audiosync-frontend-git-main-prashant-kumar-dwebedis-projects.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,
