@@ -5,29 +5,30 @@ import { v2 as cloudinary } from "cloudinary";
 import http from "http";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
-import Room from './models/SocketSchema.js'; // Adjust the import path as necessary
+import Room from "./models/SocketSchema.js"; // Adjust the import path as necessary
 
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", 
+    origin: [
+      "http://localhost:5173",
+      "https://your-frontend-domain.vercel.app",
+    ],
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
-
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected successfully."))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-
 app.use(cors());
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true, limit: "100mb" }));
-
 
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 cloudinary.config({
@@ -35,7 +36,6 @@ cloudinary.config({
   api_key: API_KEY,
   api_secret: API_SECRET,
 });
-
 
 app.get("/signature", (req, res) => {
   const timestamp = Math.round(new Date().getTime() / 1000);
@@ -45,7 +45,6 @@ app.get("/signature", (req, res) => {
   );
   res.json({ timestamp, signature, cloud_name: CLOUD_NAME, api_key: API_KEY });
 });
-
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
@@ -60,7 +59,6 @@ io.on("connection", (socket) => {
         { upsert: true, new: true }
       );
 
-      
       await Room.updateOne(
         { roomId },
         { $pull: { participants: { username } } }
@@ -188,7 +186,6 @@ io.on("connection", (socket) => {
     console.log(`User disconnected: ${socket.id}`);
   });
 });
-
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
