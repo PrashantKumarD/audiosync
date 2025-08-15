@@ -9,7 +9,7 @@ import { IoChatbox, IoSparkles } from "react-icons/io5";
 import { IoSparklesSharp } from "react-icons/io5";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "https://audiosync-qk81.vercel.app";
+  import.meta.env.VITE_API_URL || "https://audiosync-tddj.onrender.com";
 
 const socket = io.connect(API_BASE_URL);
 
