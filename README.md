@@ -206,15 +206,10 @@ We welcome contributions! Please follow these steps:
 - [ ] Mobile app development
 - [ ] Spotify/Apple Music integration
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 👨‍💻 Author
 
 **Prashant Kumar**
 - GitHub: [@PrashantKumarD](https://github.com/PrashantKumarD)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
 
 ## 🙏 Acknowledgments
 
@@ -226,8 +221,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 If you encounter any issues or have questions:
-- Open an [issue](https://github.com/yourusername/rhythmsync/issues)
-- Email: your.email@example.com
+- Email: kumarprashant6080@gmail.com
 
 ---
 
