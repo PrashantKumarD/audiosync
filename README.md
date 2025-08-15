@@ -2,10 +2,9 @@
 
 <div align="center">
   <img src="screenshots/pc_screenshot.png" alt="RhythmSync Desktop View" width="800"/>
+
+  [![Live on Vercel](https://img.shields.io/badge/Live%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://audiosync-frontend.vercel.app)
   
-  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://your-vercel-app.vercel.app)
-  [![GitHub Stars](https://img.shields.io/github/stars/yourusername/rhythmsync?style=for-the-badge)](https://github.com/yourusername/rhythmsync)
-  [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 </div>
 
 ## 🌟 Overview
