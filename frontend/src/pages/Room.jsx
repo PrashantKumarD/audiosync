@@ -8,8 +8,10 @@ import { MdAudiotrack } from "react-icons/md";
 import { IoChatbox, IoSparkles } from "react-icons/io5";
 import { IoSparklesSharp } from "react-icons/io5";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "https://audiosync-qk81.vercel.app";
 
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect(API_BASE_URL);
 
 const formatTime = (seconds) => {
   if (isNaN(seconds) || seconds < 0) return "00:00";
@@ -21,6 +23,7 @@ const formatTime = (seconds) => {
 };
 
 const Room = () => {
+  
   const { roomId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -190,7 +193,9 @@ const Room = () => {
     const file = e.target.files[0];
     if (!file) return;
     try {
-      const sigRes = await axios.get("http://localhost:3000/signature");
+      const sigRes = await axios.get(
+        `${API_BASE_URL}/signature`
+      );
       const { timestamp, signature, cloud_name, api_key } = sigRes.data;
       const formData = new FormData();
       formData.append("file", file);
