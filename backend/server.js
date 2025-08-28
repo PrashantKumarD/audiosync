@@ -25,16 +25,12 @@ const io = new Server(server, {
 
 mongoose
   .connect(process.env.MONGO_URI, {
-    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-    socketTimeoutMS: 450000, // Close sockets after 45s of inactivity
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 450000,
   })
   .then(() => console.log("MongoDB connected successfully."))
   .catch((err) => {
     console.error("MongoDB connection error:", err);
-    console.error(
-      "Connection string:",
-      process.env.MONGO_URI ? "Present" : "Missing"
-    );
   });
 
 app.use(cors());
@@ -50,7 +46,7 @@ cloudinary.config({
 
 // Root route to show server status
 app.get("/", (req, res) => {
-  res.send('backend is running');
+  res.send("backend is running");
 });
 
 app.get("/signature", (req, res) => {
@@ -93,23 +89,11 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("send_message", async ({ roomId, username, text }) => {
-    try {
-      const newMessage = { username, text };
-      await Room.updateOne({ roomId }, { $push: { chatHistory: newMessage } });
-      io.to(roomId).emit("receive_message", newMessage);
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  });
-
   socket.on("send_audio", async ({ roomId, audioUrl }) => {
     try {
       const update = {
         currentAudioUrl: audioUrl,
         isPlaying: false,
-        lastKnownTime: 0,
-        lastKnownTimeUpdatedAt: Date.now(),
       };
       await Room.updateOne({ roomId }, update);
       io.to(roomId).emit("receive_audio", audioUrl);
@@ -120,23 +104,8 @@ io.on("connection", (socket) => {
 
   socket.on("request_to_play", async ({ roomId }) => {
     try {
-      const room = await Room.findOne({ roomId });
-      if (room) {
-        const timeElapsed =
-          (Date.now() - new Date(room.lastKnownTimeUpdatedAt).getTime()) / 1000;
-        const currentTime = room.isPlaying
-          ? room.lastKnownTime + timeElapsed
-          : room.lastKnownTime;
-        await Room.updateOne(
-          { roomId },
-          {
-            isPlaying: true,
-            lastKnownTime: currentTime,
-            lastKnownTimeUpdatedAt: Date.now(),
-          }
-        );
-        io.to(roomId).emit("receive_play", currentTime);
-      }
+      await Room.updateOne({ roomId }, { isPlaying: true });
+      io.to(roomId).emit("receive_play");
     } catch (error) {
       console.error("Error on request_to_play:", error);
     }
@@ -144,40 +113,10 @@ io.on("connection", (socket) => {
 
   socket.on("request_to_pause", async ({ roomId }) => {
     try {
-      const room = await Room.findOne({ roomId });
-      if (room) {
-        const timeElapsed =
-          (Date.now() - new Date(room.lastKnownTimeUpdatedAt).getTime()) / 1000;
-        const newTime = room.isPlaying
-          ? room.lastKnownTime + timeElapsed
-          : room.lastKnownTime;
-        await Room.updateOne(
-          { roomId },
-          {
-            isPlaying: false,
-            lastKnownTime: newTime,
-            lastKnownTimeUpdatedAt: Date.now(),
-          }
-        );
-        io.to(roomId).emit("receive_pause");
-      }
+      await Room.updateOne({ roomId }, { isPlaying: false });
+      io.to(roomId).emit("receive_pause");
     } catch (error) {
       console.error("Error on request_to_pause:", error);
-    }
-  });
-
-  socket.on("send_seek", async ({ roomId, time }) => {
-    try {
-      await Room.updateOne(
-        { roomId },
-        {
-          lastKnownTime: time,
-          lastKnownTimeUpdatedAt: Date.now(),
-        }
-      );
-      io.to(roomId).emit("receive_seek", time);
-    } catch (error) {
-      console.error("Error sending seek:", error);
     }
   });
 
